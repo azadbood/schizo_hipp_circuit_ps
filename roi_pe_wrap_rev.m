@@ -1,16 +1,16 @@
-%% Univariate analysis
+%% Univariate analysis (data presented in Figure 3, Figure S4, Figure S6)
 % Reads outputs of level 2 FEAT, pool across subjects, 
 % Creates a figure with NN, OO, SS condition results
 % Prepares an excel file for running ststs in R
 
 clear
 
-label = 'both'; % indx (first session) or both
+label = 'both'; % indx (first session) or both, set for within or across group analyses
 r = 10; % which ROI to tun now
 ccall = 1:4;%  run all 4 both conditions together for stats
 
 % read ROI names
-roi_fnames = {'DG','CA23','CA1','v1','loc','dlpfc','mpfc','rsp','perirhinal'};
+roi_fnames = {'DG','CA23','CA1'};
 
 % read subject and cond info
 basepath = '/data/schizo/';
@@ -28,6 +28,7 @@ runsss =data(1:end,7:10);
 bothses = data(1:end,11);
 conds = {'nn','oo','ss'};
 
+% find subjects per groups
 conditions = {'patient ses1','patient ses2','control ses1','control ses2'};
 indx{1} = intersect(find(strcmp(session,'ses-01')),find(strcmp(group,'patient'))); %patient ses1
 indx{2} = intersect(find(strcmp(session,'ses-02')),find(strcmp(group,'patient'))); %patient ses2
@@ -56,6 +57,7 @@ for cc = ccall
         % read data
         for c = 1:length(conds)
             thiscond = conds{c};
+            % read GLM results for each condition and ROI
             filename = fullfile(basepath,'glm','level2',names{sub},session{sub},[thiscond '_cope' num2str(c) '.gfeat/cope' num2str(c) '.feat'],roi_fnames{r},'report.txt');
             
             fid = fopen(filename,'r');
@@ -134,5 +136,5 @@ TT = [];
 for t = 1:length(T)
     TT = [TT;T{t}];
 end
-writetable(TT,fullfile('/Users/asieh/Documents/gitprojects/schizo_pattern/results/paper/newfigures/uniparts',['roi_uni_minusSS_finall_' roi_fnames{r} '_' label '.csv']))
+writetable(TT,fullfile('/Documents/gitprojects/schizo_pattern/results/uniparts',['roi_uni_minusSS_finall_' roi_fnames{r} '_' label '.csv']))
 clear TT alldata
