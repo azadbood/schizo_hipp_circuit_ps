@@ -1,3 +1,6 @@
+# Codes related to the mixed effect modeling analyses, Figure 4 - 6 and Figure S7-S8
+# creates and saves model output and figures
+
 library(lme4)
 library(sjPlot)
 library(ggplot2)
@@ -10,9 +13,10 @@ set_theme(base = theme_classic(), #To remove the background color and the grids
           axis.title.size = 1.2,  #To change axis title size
           axis.textsize.x = 1.2,  #To change x axis text size
           axis.textsize.y = 1.2)  #To change y axis text size
-roi <- 'DG_nover'
+# reading ROI
+roi <- 'DG'
 # read hipp subfields data
-dsall <- read.csv(paste('/data/schizo/results/alltrial_', roi,'_imaging.csv', sep =""))
+dsall <- read.csv(paste('/schizo/results/alltrial_', roi,'_imaging.csv', sep =""))
 
 ## scale variables
 dsall$bvalues <- dsall$bvalues/100
@@ -30,7 +34,7 @@ ungroup(ds)
 ## check the distribution
 hist(ds['bvalues'],plot = TRUE)
 
-############################### across two sessions bvalues #################################
+############################### across two sessions #################################
 options(warn = 2)   
 conditions <- list("s","o","n")
 for (val in conditions)
